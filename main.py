@@ -12,7 +12,7 @@ class DBModule(BaseModule):
     @property
     def module_permissions(self) -> list[Permissions]:
         return [
-            Permissions.use_db
+            Permissions.require_db
         ]
 
     @property
@@ -22,13 +22,13 @@ class DBModule(BaseModule):
     def on_init(self):
         test1 = Test(info="TEst1!!11")
         test2 = Test(info="test2")
-        self.db_session.add(test1)
-        self.db_session.add(test2)
-        self.db_session.commit()
+        self.db.session.add(test1)
+        self.db.session.add(test2)
+        self.db.session.commit()
 
     async def db_example_cmd(self, message: Message):
         text = 'Database items: \n'
-        for item in self.db_session.scalars(select(Test).order_by(Test.id)).all():
+        for item in self.db.session.scalars(select(Test).order_by(Test.id)).all():
             item: Test
             print(item)
             text += f'{item.id} - {item.info}\n'
